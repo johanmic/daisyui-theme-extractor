@@ -37,63 +37,41 @@ if you however need multiple themes, custom themes etc this tool might be useful
 
 ## Installation
 
-1. Clone or download this project
-2. Install dependencies:
+Install as a dev dependency using your preferred package manager:
 
 ```bash
-npm install
-# or
-pnpm install
-```
+# npm
+npm add daisyui-theme-extractor -D
 
-3. Build the TypeScript code:
+# pnpm
+pnpm add daisyui-theme-extractor -D
 
-```bash
-npm run build
-```
+# yarn
+yarn add daisyui-theme-extractor -D
 
-## Project Structure
-
-```
-.
-├── src/
-│   └── theme-extractor.ts    # Main TypeScript source
-├── dist/                      # Compiled JavaScript output
-├── types.ts                   # Type definitions & utilities
-├── example-usage.ts           # Usage examples & ThemeManager
-├── package.json
-├── tsconfig.json
-├── .gitignore
-├── README.md
-└── QUICKSTART.md
+# bun
+bun add daisyui-theme-extractor -D
 ```
 
 ## Usage
 
-### Development Mode (with tsx)
-
-Run directly without building:
+After installation, you can use the `themetextractor` command:
 
 ```bash
-npm run dev -- -t forest,dark -o themes.json
-```
+# Extract single theme
+pnpm themextractor --themes forest
 
-### Production Mode
+# Extract multiple themes
+pnpm themextractor --themes forest,lofi,dark
 
-Build and run:
+# Extract themes and save to custom file
+pnpm themextractor --themes forest,lofi -o ./output/themes.json
 
-```bash
-# Build the project
-npm run build
+# Extract themes from CSS file
+pnpm themextractor --read-css --css-path="./src/index.css"
 
-# Run the compiled version
-npm start -- -t forest,dark -o themes.json
-
-# Or use the npm script
-npm run extract -- -t forest,dark -o themes.json
-
-# Or run directly
-node dist/theme-extractor.js -t forest,dark -o themes.json
+# Combine CSS themes with additional themes
+pnpm themextractor --read-css --themes cyberpunk,synthwave
 ```
 
 ## Command Line Options
@@ -110,13 +88,13 @@ node dist/theme-extractor.js -t forest,dark -o themes.json
 
 ```bash
 # Extract single theme
-npm run extract -- -t forest -o themes.json
+pnpm themextractor --themes forest
 
 # Extract multiple themes
-npm run extract -- -t forest,dark,light -o ./output/themes.json
+pnpm themextractor --themes forest,dark,light -o ./output/themes.json
 
 # Using long form options
-npm run extract -- --themes="cupcake,bumblebee,emerald" --output="./themes.json"
+pnpm themextractor --themes="cupcake,bumblebee,emerald" --output="./themes.json"
 ```
 
 ### Extract from CSS File
@@ -137,10 +115,10 @@ Extract those themes:
 
 ```bash
 # Reads from default path (src/index.css)
-npm run extract -- --read-css -o themes.json
+pnpm themextractor --read-css
 
 # Specify custom CSS path
-npm run extract -- --read-css --css-path="./styles/main.css" -o themes.json
+pnpm themextractor --read-css --css-path="./styles/main.css" -o themes.json
 ```
 
 This will extract: `light`, `dark`, and `forest` (the `--default` and `--prefersdark` flags are automatically ignored).
@@ -169,7 +147,7 @@ The tool will extract these inline themes directly without needing node_modules.
 
 ```bash
 # Extract themes from CSS AND additional themes from CLI
-npm run extract -- --read-css -t cyberpunk,synthwave -o themes.json
+pnpm themextractor --read-css --themes cyberpunk,synthwave
 
 # This will extract:
 # - All themes listed in @plugin "daisyui" blocks
@@ -200,7 +178,7 @@ Given this `src/index.css`:
 Running:
 
 ```bash
-npm run extract -- --read-css -o themes.json
+pnpm themextractor --read-css
 ```
 
 Will extract 4 themes:
@@ -250,53 +228,30 @@ The tool generates a JSON file with cleaned property names (removes `--` and `--
 }
 ```
 
-## Development Scripts
-
-```bash
-# Build the project
-npm run build
-
-# Watch mode (rebuild on changes)
-npm run watch
-
-# Run in development mode (no build needed)
-npm run dev -- -t forest -o themes.json
-
-# Run with CSS reading in dev mode
-npm run dev -- --read-css --css-path="./src/styles.css"
-
-# Clean build artifacts
-npm run clean
-```
-
 ## Advanced Examples
 
 ### Extract All Themes from a Project
 
 ```bash
 # Extract all themes defined in your CSS plus additional themes
-npm run extract -- --read-css --css-path="./app/globals.css" -t synthwave,cyberpunk -o all-themes.json
+pnpm themextractor --read-css --css-path="./app/globals.css" --themes synthwave,cyberpunk -o all-themes.json
 ```
 
 ### Development Workflow
 
 ```bash
-# Make changes to src/theme-extractor.ts
-# Run immediately without building
-npm run dev -- --read-css -o test.json
+# Extract themes during development
+pnpm themextractor --read-css -o test.json
 ```
 
 ### Global Installation (Optional)
 
 ```bash
-# Build first
-npm run build
-
 # Install globally
-npm install -g
+npm install -g daisyui-theme-extractor
 
 # Then use anywhere
-extract-daisyui-themes --read-css --css-path="./src/index.css" -o themes.json
+themetextractor --read-css --css-path="./src/index.css" -o themes.json
 ```
 
 ## Color Conversion
@@ -391,13 +346,13 @@ All errors are properly typed with type guards:
 
 ## Troubleshooting
 
-### TypeScript Compilation Errors
+### Installation Issues
 
-If you encounter TypeScript errors:
+If you encounter installation issues:
 
-1. Ensure all dependencies are installed: `npm install`
-2. Clean and rebuild: `npm run clean && npm run build`
-3. Check your Node.js version: `node --version` (should be 18+)
+1. Ensure you're using Node.js 18+: `node --version`
+2. Clear your package manager cache and try again
+3. Check that your project has `"type": "module"` in package.json
 
 ### Module Import Errors
 
@@ -407,12 +362,13 @@ Make sure:
 - The `package.json` includes `"type": "module"`
 - TypeScript is configured with `"module": "ES2022"`
 
-### Development Mode Not Working
+### Command Not Found
 
-If `npm run dev` fails:
+If `themetextractor` command is not found:
 
-1. Ensure `tsx` is installed: `npm install`
-2. Try rebuilding: `npm run build && npm start`
+1. Ensure the package is installed: `pnpm list daisyui-theme-extractor`
+2. Try using npx: `npx themextractor --themes forest`
+3. Check your package manager's bin configuration
 
 ## Contributing
 

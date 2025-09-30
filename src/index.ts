@@ -4,7 +4,7 @@ import chalk from "chalk"
 import { formatHex } from "culori"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import { createRequire } from "module"
-import { dirname, join, resolve } from "path"
+import { dirname, join, relative, resolve } from "path"
 import { fileURLToPath } from "url"
 import { parseArgs } from "util"
 
@@ -69,6 +69,20 @@ const getErrorMessage = (error: unknown): string => {
     return error.message
   }
   return String(error)
+}
+
+/**
+ * Convert absolute path to relative path for cleaner logging
+ */
+const getRelativePath = (absolutePath: string): string => {
+  try {
+    const relativePath = relative(process.cwd(), absolutePath)
+    // If the relative path starts with '../', it means the file is outside the cwd
+    // In that case, return the original path
+    return relativePath.startsWith("../") ? absolutePath : relativePath
+  } catch {
+    return absolutePath
+  }
 }
 
 /**
@@ -462,7 +476,11 @@ const main = async (): Promise<void> => {
   // Read CSS file if enabled
   if (readCss) {
     try {
-      console.log(chalk.cyan(`📄 Reading CSS file: ${chalk.bold(cssPath)}`))
+      console.log(
+        chalk.cyan(
+          `📄 Reading CSS file: ${chalk.bold(getRelativePath(cssPath))}`
+        )
+      )
       const { themeNames, inlineThemes } = readCssFile(cssPath)
 
       if (themeNames.length > 0) {
@@ -509,7 +527,9 @@ const main = async (): Promise<void> => {
       )}`
     )
   )
-  console.log(chalk.cyan(`📦 Output file: ${chalk.bold(output)}`))
+  console.log(
+    chalk.cyan(`📦 Output file: ${chalk.bold(getRelativePath(output))}`)
+  )
   console.log("")
 
   // Process each theme
@@ -556,7 +576,7 @@ const main = async (): Promise<void> => {
       chalk.green.bold(
         `✨ Successfully wrote ${chalk.yellow(
           Object.keys(result).length
-        )} theme(s) to ${chalk.cyan(output)}`
+        )} theme(s) to ${chalk.cyan(getRelativePath(output))}`
       )
     )
 

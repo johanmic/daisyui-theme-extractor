@@ -1,6 +1,6 @@
 {
   "name": "daisyui-theme-extractor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool to extract DaisyUI themes and convert OKLCH colors to hex",
   "main": "dist/index.js",
   "type": "module",
