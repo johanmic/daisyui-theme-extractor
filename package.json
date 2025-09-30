@@ -1,0 +1,60 @@
+{
+  "name": "daisyui-theme-extractor",
+  "version": "1.0.0",
+  "description": "CLI tool to extract DaisyUI themes and convert OKLCH colors to hex",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "daisyui-theme-extractor": "./dist/index.js",
+    "themextractor": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "postbuild": "chmod +x dist/index.js",
+    "watch": "tsc --watch",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "extract": "npm run build && node dist/index.js",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --maxWorkers=2"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "culori": "^4.0.1",
+    "daisyui": "^4.12.10"
+  },
+  "peerDependencies": {
+    "daisyui": "^5.1.25"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.2.0",
+    "@types/culori": "^4.0.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.0.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.4",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "daisyui",
+    "themes",
+    "css",
+    "color-conversion",
+    "cli",
+    "typescript"
+  ],
+  "author": "Johan Mickelin",
+  "license": "MIT"
+}
